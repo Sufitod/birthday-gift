@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You, My Love</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #2b101d; 
+            color: #f7e1ed; 
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Continuous Falling Flowers System */
+        .falling-flower {
+            position: fixed;
+            top: -10%;
+            z-index: 9999;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% {
+                top: -10%;
+                transform: translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                top: 110%;
+                transform: translateX(100px) rotate(360deg);
+                opacity: 0.3;
+            }
+        }
+
+        /* 1. Impressive Locking Pin Screen */
+        #lock-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at center, #351424 0%, #17050f 100%); 
+            z-index: 1000; display: flex;
+            flex-direction: column; align-items: center; justify-content: center;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .lock-container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(229, 155, 184, 0.15);
+            border-radius: 30px;
+            padding: 40px 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 360px;
+            width: 90%;
+            position: relative;
+        }
+
+        .lock-flower-top {
+            font-size: 2.2rem;
+            position: absolute;
+            top: -24px;
+        }
+
+        .lock-header { 
+            font-family: 'Cinzel', serif; 
+            font-size: 2.2rem; 
+            margin-bottom: 10px; 
+            color: #ffffff; 
+            text-shadow: 0 0 15px rgba(229, 155, 184, 0.4);
+            text-align: center; 
+        }
+
+        .lock-subtitle {
+            font-size: 0.8rem;
+            font-family: 'Montserrat';
+            opacity: 0.5;
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+        }
+
+        .dots-container { display: flex; gap: 15px; margin-bottom: 35px; }
+        .dot { width: 12px; height: 12px; border: 2px solid rgba(229, 155, 184, 0.4); border-radius: 50%; transition: all 0.3s ease; }
+        .dot.active { background: #e59bb8; border-color: #e59bb8; box-shadow: 0 0 15px #e59bb8; transform: scale(1.1); }
+        
+        /* Modern Premium Glassmorphism Keypad Layout */
+        .keypad { display: grid; grid-template-columns: repeat(3, 75px); gap: 18px; justify-content: center; }
+        .key { 
+            width: 75px; height: 75px; border-radius: 50%; 
+            border: 1px solid rgba(229, 155, 184, 0.1);
+            background: rgba(255, 255, 255, 0.02); 
+            color: #ffffff; 
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(4px);
+        }
+        .key:active { 
+            background: rgba(229, 155, 184, 0.2); 
+            border-color: rgba(229, 155, 184, 0.5);
+            transform: scale(0.92); 
+        }
+        .key-special { 
+            font-size: 1rem; 
+            background: transparent;
+            border-color: transparent;
+        }
+        .key-special svg {
+            width: 22px;
+            height: 22px;
+            fill: #e59bb8;
+            opacity: 0.8;
+        }
+
+        .lock-hint {
+            font-size: 0.75rem;
+            color: rgba(247, 225, 237, 0.4);
+            margin-top: 25px;
+            letter-spacing: 0.5px;
+        }
+
+        /* 2. Gift Screen Panel & Custom Vector Gift Box Container */
+        #gift-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #2b101d; z-index: 998; display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1s ease;
+        }
+
+        .gift-instruction {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            color: rgba(247, 225, 237, 0.8);
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        /* Modern CSS/SVG Gift Box */
+        .gift-box-wrapper {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            animation: soft-float 2.5s infinite alternate ease-in-out;
+        }
+        @keyframes soft-float {
+            0% { transform: translateY(0) rotate(-1deg); }
+            100% { transform: translateY(-12px) rotate(1deg); }
+        }
+
+        .gift-lid {
+            position: absolute;
+            top: 0; left: -5px;
+            width: 190px; height: 40px;
+            background: #e59bb8;
+            border-radius: 4px;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+        }
+        .gift-lid::before {
+            content: '';
+            position: absolute;
+            left: 87px; top: 0;
+            width: 16px; height: 100%;
+            background: #ffdf7a;
+        }
+        /* Top Ribbon Bow */
+        .gift-bow {
+            position: absolute;
+            top: -24px; left: 77px;
+            width: 36px; height: 26px;
+            background: #ffdf7a;
+            border-radius: 50% 50% 0 0;
+        }
+        .gift-bow::after {
+            content: '';
+            position: absolute;
+            left: -15px; top: 5px;
+            width: 25px; height: 20px;
+            background: #ffdf7a;
+            border-radius: 50%;
+            transform: rotate(-30deg);
+        }
+        .gift-bow::before {
+            content: '';
+            position: absolute;
+            right: -15px; top: 5px;
+            width: 25px; height: 20px;
+            background: #ffdf7a;
+            border-radius: 50%;
+            transform: rotate(30deg);
+        }
+
+        .gift-body {
+            position: absolute;
+            top: 38px; left: 5px;
+            width: 170px; height: 142px;
+            background: #d480a1;
+            border-radius: 0 0 8px 8px;
+            z-index: 1;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: transform 1.2s ease, opacity 0.8s ease;
+        }
+        .gift-body::before {
+            content: '';
+            position: absolute;
+            left: 77px; top: 0;
+            width: 16px; height: 100%;
+            background: #ffdf7a;
+        }
+        .gift-body::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 60px;
+            width: 100%; height: 16px;
+            background: #ffdf7a;
+        }
+
+        /* Opening Animation Mechanics */
+        .gift-box-wrapper.open .gift-lid {
+            transform: translateY(-80px) rotate(-15deg);
+            opacity: 0;
+        }
+        .gift-box-wrapper.open .gift-body {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+
+        /* Light burst lines effect */
+        .burst-line {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 2px; height: 0px;
+            background: linear-gradient(to top, transparent, #e59bb8, transparent);
+            transform-origin: center center;
+            opacity: 0;
+            z-index: 0;
+            transition: all 1s ease;
+        }
+
+        /* 3. Main Dashboard Layout */
+        #app-content { display: none; padding: 0px 0px 120px 0px; max-width: 500px; margin: 0 auto; text-align: center; }
+        
+        /* SECTIONS GAP AND SPACING STRUCTURE */
+        .app-section-spacer {
+            margin-top: 100px;
+            margin-bottom: 30px;
+        }
+
+        .intro-hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .hero-bg-flower {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.7;
+        }
+        .hero-sub-header {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: rgba(247, 225, 237, 0.6);
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .hero-title-main {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 400;
+            line-height: 1.2;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+        .hero-title-italic {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 4rem;
+            color: #e59bb8;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+        .hero-name {
+            font-family: 'Cinzel', serif;
+            font-size: 3.2rem;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 1px;
+            margin-bottom: 60px;
+        }
+        .hero-center-tag {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 2.2rem;
+            color: rgba(247, 225, 237, 0.5);
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        .hero-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(229, 155, 184, 0.5), transparent);
+            margin-bottom: 40px;
+        }
+        .hero-date-tag {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: rgba(247, 225, 237, 0.4);
+            text-transform: uppercase;
+            margin-bottom: 80px;
+        }
+        .hero-footer-tag {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            color: rgba(247, 225, 237, 0.3);
+            text-transform: uppercase;
+        }
+
+        .section-title { font-family: 'Cinzel', serif; font-size: 2.2rem; color: #e59bb8; margin-bottom: 25px; }
+
+        /* --- 3D ART VASE & SWIRLING SUNFLOWER STEM --- */
+        .bouquet-wrapper { background: transparent; padding: 20px 0; }
+        .bouquet-title { font-family: 'Cinzel', serif; font-size: 2.2rem; color: #ffffff; font-weight: 400; margin-bottom: 8px; letter-spacing: 1px; text-align: center; }
+        .bouquet-subtitle { font-size: 0.9rem; color: rgba(247, 225, 237, 0.6); margin-bottom: 30px; font-weight: 300; text-align: center; }
+        
+        .bouquet-container { 
+            position: relative; 
+            width: 100%; 
+            height: 480px; 
+            margin: 0 auto; 
+            display: flex; 
+            flex-direction: column;
+            justify-content: flex-end; 
+            align-items: center;
+            perspective: 1000px; /* Ditambah: Memberi impak kedalaman 3D yang realistik */
+        }
+
+        /* Struktur Bunga Matahari STATIK & SEIMBANG */
+        .sunflower-3d {
+            position: absolute;
+            top: 40px; /* Dinaikkan sedikit ke atas */
+            width: 160px;
+            height: 160px;
+            transform-style: preserve-3d;
+            z-index: 5;
+        }
+
+        /* Bahagian Tengah (Pusat Coklat) - Ditengahkah & Dinaikkan Sempurna */
+        .sunflower-center {
+            position: absolute;
+            top: 50px;       /* Diselaraskan kedudukan paksi Y */
+            left: 50px;      /* Diselaraskan kedudukan paksi X */
+            width: 60px;     /* Dikecilkan sikit (daripada 70px) supaya batang tak tertutup habis */
+            height: 60px;
+            background: radial-gradient(circle, #2b1704 0%, #4a2c0c 70%, #1a0f02 100%);
+            border-radius: 50%;
+            transform: translateZ(15px); /* Kekal di lapisan paling hadapan kelopak */
+            z-index: 10;
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.5);
+            border: 2px dashed rgba(255, 183, 3, 0.25);
+        }
+
+        /* Kelopak Kuning - Disusun Semula Titik Asal Paksi (Center Point) */
+        .s-petal {
+            position: absolute;
+            top: -10px;      /* Ditolak naik ke atas paksi pusat */
+            left: 67px;      /* Berada tepat di titik tengah horizontal (160px / 2 - 30px / 2) */
+            width: 26px;     /* Saiz kelopak yang lebih kemas */
+            height: 90px;
+            background: linear-gradient(to top, #ffb703 0%, #fb8500 60%, #d46a00 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform-origin: center 90px; /* Dikunci titik putaran jejari tepat pada pusat bulatan coklat */
+            opacity: 0.95;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+        }
+
+        /* Susunan 16 Kelopak Membulat Penuh (3D Layers) */
+        .s-petal:nth-child(1)  { transform: rotateZ(0deg) rotateX(20deg); }
+        .s-petal:nth-child(2)  { transform: rotateZ(22.5deg) rotateX(20deg); }
+        .s-petal:nth-child(3)  { transform: rotateZ(45deg) rotateX(20deg); }
+        .s-petal:nth-child(4)  { transform: rotateZ(67.5deg) rotateX(20deg); }
+        .s-petal:nth-child(5)  { transform: rotateZ(90deg) rotateX(20deg); }
+        .s-petal:nth-child(6)  { transform: rotateZ(112.5deg) rotateX(20deg); }
+        .s-petal:nth-child(7)  { transform: rotateZ(135deg) rotateX(20deg); }
+        .s-petal:nth-child(8)  { transform: rotateZ(157.5deg) rotateX(20deg); }
+        .s-petal:nth-child(9)  { transform: rotateZ(180deg) rotateX(20deg); }
+        .s-petal:nth-child(10) { transform: rotateZ(202.5deg) rotateX(20deg); }
+        .s-petal:nth-child(11) { transform: rotateZ(225deg) rotateX(20deg); }
+        .s-petal:nth-child(12) { transform: rotateZ(247.5deg) rotateX(20deg); }
+        .s-petal:nth-child(13) { transform: rotateZ(270deg) rotateX(20deg); }
+        .s-petal:nth-child(14) { transform: rotateZ(292.5deg) rotateX(20deg); }
+        .s-petal:nth-child(15) { transform: rotateZ(315deg) rotateX(20deg); }
+        .s-petal:nth-child(16) { transform: rotateZ(337.5deg) rotateX(20deg); }
+
+        /* Batang Melengkung-Lengkung/Berpusing (Swirling Artistic Stems) */
+        .sculpture-stems {
+            position: absolute;
+            bottom: 120px;
+            width: 220px;
+            height: 260px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        
+        .sculpture-stems svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Daun-daun Kecil Terapung pada Ranting */
+        .sculpture-leaf {
+            position: absolute;
+            font-size: 1.1rem;
+            color: #728c63;
+            z-index: 4;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        /* PASU SERAMIK ANTIK PREMIUM (Ancient Ceramic Vase) */
+        .ceramic-vase {
+            position: relative;
+            width: 140px;
+            height: 130px;
+            z-index: 10;
+            margin-bottom: 15px;
+            background: linear-gradient(145deg, #423832 0%, #211a17 100%);
+            border-radius: 40% 40% 50% 50% / 15% 15% 85% 85%;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.7), 
+                inset -10px -10px 25px rgba(0,0,0,0.6),
+                inset 10px 10px 25px rgba(255,255,255,0.05);
+            border: 1px solid rgba(94, 79, 70, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Mulut Pasu Berkedalaman */
+        .ceramic-vase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100px;
+            height: 16px;
+            background: #16110e;
+            border-radius: 50%;
+            border: 2px solid #5a4c43;
+            transform: translateY(-50%);
+            box-shadow: inset 0 5px 10px rgba(0,0,0,0.9);
+        }
+
+        /* Ukiran Siluet Ular/Corak Purba pada Badan Pasu */
+        .vase-engraving {
+            width: 75%;
+            height: 60%;
+            opacity: 0.25;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M10,50 Q30,20 50,50 T90,50' fill='none' stroke='%23f7e1ed' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* --- Elegant Letter Style matching Uploaded Picture --- */
+        .letter-header-tag {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            color: rgba(247, 225, 237, 0.4);
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+        .letter-paper-view {
+            background: #fffcfd;
+            border-radius: 12px;
+            padding: 50px 30px;
+            margin: 0 20px;
+            text-align: left;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+            color: #4a313d;
+            position: relative;
+        }
+        .letter-date {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-style: italic;
+            color: #9c788a;
+            text-align: center;
+            margin-bottom: 40px;
+            display: block;
+        }
+        .letter-salutation {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: #2b101d;
+            margin-bottom: 25px;
+            font-weight: 400;
+        }
+        .letter-body-p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #5c4450;
+            font-weight: 400;
+            margin-bottom: 25px;
+        }
+        .letter-body-p.italic-quote {
+            font-style: italic;
+            color: #8c6377;
+        }
+        .letter-ps-box {
+            background: #fff2f6;
+            border-left: 2px solid #e59bb8;
+            padding: 15px;
+            font-size: 0.9rem;
+            color: #8c6377;
+            font-style: italic;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        .letter-valediction {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 1.8rem;
+            color: #8c6377;
+            text-align: right;
+            margin-bottom: 5px;
+        }
+        .letter-sender {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: #2b101d;
+            text-align: right;
+            font-weight: 400;
+        }
+
+        /* --- Section Header for Photo Memories --- */
+        .photo-memories-header {
+            margin-bottom: 35px;
+        }
+        .photo-memories-tag {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            color: rgba(247, 225, 237, 0.4);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .photo-memories-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.4rem;
+            color: #ffffff;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        .photo-memories-subtitle {
+            font-size: 0.85rem;
+            color: rgba(247, 225, 237, 0.5);
+            font-weight: 300;
+        }
+
+        /* --- Interactive Booklet Album Section --- */
+        .album-booklet-wrapper {
+            position: relative;
+            width: 320px;
+            height: 410px;
+            margin: 0 auto;
+        }
+        .album-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            perspective: 1000px;
+        }
+        .polaroid-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            padding: 16px 16px 30px 16px;
+            color: #2b101d;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.4);
+            border-radius: 4px;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.9) rotate(0deg);
+        }
+        /* Active stack visibility styles */
+        .polaroid-card.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1) rotate(-2deg);
+            z-index: 3;
+        }
+        .polaroid-card.next-stacked {
+            opacity: 0.4;
+            transform: scale(0.95) translateY(10px) rotate(3deg);
+            z-index: 1;
+        }
+        .polaroid-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 2px;
+            background: #eaeaea;
+        }
+        .polaroid-card .caption {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 15px;
+            letter-spacing: 0.5px;
+        }
+        .album-controls {
+            margin-top: 25px;
+            display: flex;
+            box-pack: center;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+        }
+        .album-btn {
+            background: rgba(229, 155, 184, 0.15);
+            border: 1px solid rgba(229, 155, 184, 0.4);
+            color: #f7e1ed;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        .album-btn:hover {
+            background: #e59bb8;
+            color: #15050d;
+            box-shadow: 0 0 15px rgba(229, 155, 184, 0.4);
+        }
+        .album-counter {
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            color: rgba(247, 225, 237, 0.6);
+        }
+
+        /* --- Beautiful Dedicated Card Design From Uploaded Image --- */
+        .birthday-card-view {
+            background: linear-gradient(135deg, #2b101d 0%, #17050f 100%);
+            border: 1px solid rgba(229, 155, 184, 0.25);
+            border-radius: 24px;
+            padding: 55px 30px;
+            margin: 0 20px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+            position: relative;
+        }
+        .card-top-tag {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 2.5px;
+            color: rgba(247, 225, 237, 0.7);
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .card-main-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.6rem;
+            line-height: 1.4;
+            color: #ffffff;
+            font-weight: 400;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+        .card-title-italic {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 3.8rem;
+            color: #e59bb8;
+            display: inline-block;
+            line-height: 0.7;
+            transform: translateY(6px);
+        }
+        .card-paragraph-body {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: rgba(247, 225, 237, 0.85);
+            font-weight: 300;
+            margin-bottom: 45px;
+            padding: 0 10px;
+        }
+        .card-footer-signature {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 1.9rem;
+            color: #e59bb8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* --- Audio Controller Fixed Button Layout --- */
+        .music-control-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 9999;
+            display: none; /* Display is enabled via script when dashboard loads */
+        }
+        .music-toggle-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(35, 14, 25, 0.75);
+            border: 1px solid rgba(229, 155, 184, 0.4);
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .music-toggle-btn:hover {
+            transform: scale(1.08);
+            border-color: rgba(229, 155, 184, 0.8);
+            box-shadow: 0 0 15px rgba(229, 155, 184, 0.3);
+        }
+        .music-toggle-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #f7e1ed;
+            transition: fill 0.3s;
+        }
+        .music-toggle-btn.muted svg {
+            fill: #e59bb8;
+        }
+
+        /* --- SECRET LOVE PAGE SYSTEM --- */
+        #secret-love-page {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #1a0610; /* Latar belakang malam pekat */
+            z-index: -9999;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.5s ease-in-out;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        #secret-love-page.active {
+            z-index: 100000;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Teks Ucapan Sweet */
+        .secret-message {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 3.5rem;
+            color: #ff758f;
+            text-shadow: 0 0 20px rgba(255, 117, 143, 0.6);
+            text-align: center;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 2s ease-out 1s;
+        }
+        
+        .secret-message.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .secret-submessage {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            color: #f7e1ed;
+            opacity: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 2s ease-out 2.5s;
+        }
+        .secret-submessage.reveal { opacity: 0.7; }
+
+        /* Animasi Hati Terapung Cute & Smooth */
+        .floating-heart-container {
+            position: absolute;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sweet-heart {
+            position: absolute;
+            bottom: -10%;
+            color: #ff4d6d;
+            filter: drop-shadow(0 0 8px rgba(255, 77, 109, 0.5));
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-110vh) scale(1.3) rotate(30deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="lock-screen">
+        <div class="lock-container">
+            <div class="lock-flower-top">🌸</div>
+            <h1 class="lock-header">For You, My Love</h1>
+            <p class="lock-subtitle">Enter our secret code</p>
+            
+            <div class="dots-container">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+            
+            <div class="keypad">
+                <div class="key" onclick="pressKey('1')">1</div><div class="key" onclick="pressKey('2')">2</div><div class="key" onclick="pressKey('3')">3</div>
+                <div class="key" onclick="pressKey('4')">4</div><div class="key" onclick="pressKey('5')">5</div><div class="key" onclick="pressKey('6')">6</div>
+                <div class="key" onclick="pressKey('7')">7</div><div class="key" onclick="pressKey('8')">8</div><div class="key" onclick="pressKey('9')">9</div>
+                <div class="key key-special" onclick="clearKeys()">🗙</div>
+                <div class="key" onclick="pressKey('0')">0</div>
+                <div class="key key-special" onclick="backspaceKey()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="lock-hint">Hint: our special date 💕</p>
+        </div>
+    </div>
+
+    <div id="gift-screen">
+        <h2 class="gift-instruction" id="gift-text">Tap the gift box to open it 🎁</h2>
+        
+        <div class="gift-box-wrapper" id="interactive-gift" onclick="triggerGiftOpening()">
+            <div class="gift-lid">
+                <div class="gift-bow"></div>
+            </div>
+            <div class="gift-body"></div>
+        </div>
+
+        <div class="burst-line" style="transform: translate(-50%, -50%) rotate(0deg);"></div>
+        <div class="burst-line" style="transform: translate(-50%, -50%) rotate(45deg);"></div>
+        <div class="burst-line" style="transform: translate(-50%, -50%) rotate(90deg);"></div>
+        <div class="burst-line" style="transform: translate(-50%, -50%) rotate(135deg);"></div>
+        <div class="burst-line" style="transform: translate(-50%, -50%) rotate(180deg);"></div>
+        <div class="burst-line" style="transform: translate(-50%, -50%) rotate(225deg);"></div>
+        <div class="burst-line" style="transform: translate(-50%, -50%) rotate(270deg);"></div>
+        <div class="burst-line" style="transform: translate(-50%, -50%) rotate(315deg);"></div>
+    </div>
+
+    <div id="app-content">
+        <div class="intro-hero">
+            <div class="hero-bg-flower" style="top: 3%; left: 10%;">🌸</div>
+            <div class="hero-bg-flower" style="top: 4%; left: 22%;">🌺</div>
+            <div class="hero-bg-flower" style="top: 2%; right: 22%;">🌸</div>
+            <div class="hero-bg-flower" style="top: 13%; right: 15%;">🌺</div>
+            <div class="hero-bg-flower" style="bottom: 50%; left: 13%;">🌷</div>
+            <div class="hero-bg-flower" style="bottom: 48%; right: 13%;">🌸</div>
+            <div class="hero-bg-flower" style="bottom: 30%; right: 23%;">🌼</div>
+
+            <div class="hero-sub-header">
+                <span>🌸</span> Yours <span>🌼</span> Special Day <span>🌸</span>
+            </div>
+            
+            <h1 class="hero-title-main">Happy</h1>
+            <h2 class="hero-title-italic">Birthday</h2>
+            <h1 class="hero-name">Shelyna</h1>
+            
+            <p class="hero-center-tag">The</p>
+            <div class="hero-line"></div>
+            
+            <p class="hero-date-tag">June 26 · The Most Special Day</p>
+            <p class="hero-footer-tag">— My First Coding Gift —</p>
+        </div>
+
+        <div class="app-section-spacer">
+            <div class="bouquet-wrapper">
+                <h2 class="bouquet-title">A Golden Bloom For You</h2>
+                <div class="bouquet-container">
+                    
+                    <div class="sunflower-3d">
+                        <div class="sunflower-center"></div>
+
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                        <div class="s-petal"></div>
+                    </div>
+
+                    <div class="sculpture-stems">
+                        <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M100,240 C100,180 115,130 100,70" stroke="#416633" stroke-width="6.5" stroke-linecap="round"/>
+                            <path d="M103,170 C60,170 40,110 80,100 C110,92 120,130 98,145 C80,155 65,130 75,115" stroke="#3b5c2e" stroke-width="4.5" stroke-linecap="round"/>
+                            <path d="M101,140 C150,140 160,70 120,70 C90,70 95,110 115,115 C130,120 140,100 130,90" stroke="#355229" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+
+                        <div class="sculpture-leaf" style="top: 65px; left: 35%; transform: rotate(-30deg);">🍃</div>
+                        <div class="sculpture-leaf" style="top: 110px; left: 15%; transform: rotate(-75deg);">🍃</div>
+                        <div class="sculpture-leaf" style="top: 135px; left: 48%; transform: rotate(45deg);">🍃</div>
+                        <div class="sculpture-leaf" style="top: 55px; left: 62%; transform: rotate(15deg);">🍃</div>
+                        <div class="sculpture-leaf" style="top: 95px; left: 78%; transform: rotate(60deg);">🍃</div>
+                    </div>
+
+                    <div class="ceramic-vase">
+                        <div class="vase-engraving"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="app-section-spacer">
+            <div class="letter-header-tag">— From My Heart —</div>
+            <h2 class="photo-memories-title">A Letter For You</h2>
+            <div class="letter-paper-view">
+                <span class="letter-date">June 26</span>
+                <h3 class="letter-salutation">My dearest Shelyna,</h3>
+                
+                <p class="letter-body-p">
+                    Happy birthday, my love. On this beautiful day, my biggest prayer is that you are always blessed with abundant rizq, granted a long and meaningful life, and blessed with the best of health. 
+                </p>
+                
+                <p class="letter-body-p">
+                    Thank you for always being such a wonderful daughter to your family and the most amazing partner to me. May you always be granted endless patience and strength to face every single chapter of life. You are so strong, and I am incredibly proud of you.
+                </p>
+
+                <p class="letter-body-p italic-quote">
+                    You have a heart so beautiful it reflects in your eyes, and to me, you grow more breathtakingly beautiful with every passing day — inside and out.
+                </p>
+
+                <p class="letter-body-p">
+                    Thank you for bringing so much warmth and light into my life. On your special day, I hope all your sweetest dreams come true, because you deserve every ounce of happiness this world has to offer.
+                </p>
+
+                <div class="letter-ps-box">
+                    P.S. — No matter where life takes us, I will always be right here by your side, loving you today, tomorrow, and forever 🌸
+                </div>
+
+                <div class="letter-valediction">With all my love,</div>
+                <div class="letter-sender">Sufi</div>
+            </div>
+        </div>
+
+        <div class="app-section-spacer">
+            <div class="photo-memories-header">
+                <div class="photo-memories-tag">— A Collection of Memories —</div>
+                <h2 class="photo-memories-title">Our Photo Memories</h2>
+                <p class="photo-memories-subtitle">Every picture holds a beautiful story</p>
+            </div>
+            <div class="album-booklet-wrapper">
+                <div class="album-container">
+                    <div class="polaroid-card active" onclick="nextAlbumPage()">
+                        <img src="1.JPEG" alt="Memory 1">
+                        <div class="caption">Our very first date... sharing popcorn and watching wayang together 🎬🍿❤️</div>
+                    </div>
+                    <div class="polaroid-card next-stacked" onclick="nextAlbumPage()">
+                        <img src="2.JPEG" alt="Memory 2">
+                        <div class="caption">The view was breathtaking, but I couldn't stop looking at you 🌅✨</div>
+                    </div>
+                    <div class="polaroid-card" onclick="nextAlbumPage()">
+                        <img src="3.JPEG" alt="Memory 3">
+                        <div class="caption">Back at the wayang for second wayang date, falling harder for you every second 🏛️💕</div>
+                    </div>
+                    <div class="polaroid-card" onclick="nextAlbumPage()">
+                        <img src="4.JPEG" alt="Memory 4">
+                        <div class="caption">My absolute favorite partner to go jalan-jalan and explore the world with 🗺️🚶‍♂️💞</div>
+                    </div>
+                    <div class="polaroid-card" onclick="nextAlbumPage()">
+                        <img src="5.JPEG" alt="Memory 5">
+                        <div class="caption">Our first hiking adventure! Conquering trails and making memories peak ⛰️🌿🥾</div>
+                    </div>
+                    <div class="polaroid-card" onclick="nextAlbumPage()">
+                        <img src="6.JPEG" alt="Memory 6">
+                        <div class="caption">Locking in our love with our sweet little hand signature 🫶🔒🌸</div>
+                    </div>
+                    <div class="polaroid-card" onclick="nextAlbumPage()">
+                        <img src="8.JPEG" alt="Memory 7">
+                        <div class="caption">The picture I love the most... holding onto you right before I had to go home 🥺🏡💖</div>
+                    </div>
+                </div>
+                <div class="album-controls">
+                    <span class="album-counter" id="album-index-view">1 / 7</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="app-section-spacer">
+            <div class="birthday-card-view">
+                <div class="card-top-tag">🌸 With all my heart 🌸</div>
+                
+                <h2 class="card-main-title">
+                    May your life<br>
+                    <span class="card-title-italic">always</span> be filled<br>
+                    with flowers
+                </h2>
+                
+                <p class="card-paragraph-body">
+                    Happy birthday, Shelyna. May your days always be filled with love, happiness, and all the beautiful things you deserve. I am grateful every single day to know you.
+                </p>
+                
+                <div class="card-footer-signature">— With love that never runs out 💞 —</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="music-control-container" id="music-ui">
+        <button class="music-toggle-btn" onclick="toggleAudioSystem()" title="Toggle Background Music">
+            <svg id="music-icon-playing" viewBox="0 0 24 24">
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+        </button>
+    </div>
+
+    <div id="secret-love-page">
+        <div class="floating-heart-container" id="heart-box"></div>
+        
+        <h1 class="secret-message" id="msg-1">You are my whole world... ❤️</h1>
+        <p class="secret-submessage" id="msg-2">Thank you for being you.</p>
+    </div>
+
+    <audio id="bg-music" loop src="Shape Of My Heart chorus part.mp3"></audio>
+
+    <script>
+        const CORRECT_PIN = "191123";
+        let enteredPin = "";
+        const dots = document.querySelectorAll('.dot');
+        const musicTrack = document.getElementById('bg-music');
+        const musicUIContainer = document.getElementById('music-ui');
+        const musicButton = document.querySelector('.music-toggle-btn');
+
+        // Mengesan status pembukaan hadiah & status transisi halaman rahsia
+        let giftOpened = false; // Kunci keselamatan utama
+        let switchTriggered = false;
+
+        window.addEventListener('scroll', () => {
+            // JANGAN cetus jika halaman rahsia sudah aktif ATAU jika hadiah belum dibuka lagi!
+            if (switchTriggered || !giftOpened) return;
+
+            // Mengira jarak maksimum tetingkap dengan super tepat
+            const totalPageHeight = document.documentElement.scrollHeight;
+            const scrollPosition = window.innerHeight + window.scrollY;
+
+            // Bila dia scroll sampai paling bawah, boom! Halaman terbuka!
+            if (scrollPosition >= totalPageHeight - 5) {
+                switchTriggered = true;
+                openSecretLovePage();
+            }
+        });
+
+        function openSecretLovePage() {
+            const secretPage = document.getElementById('secret-love-page');
+            secretPage.classList.add('active');
+
+            // Cetus animasi teks muncul secara perlahan-lahan
+            setTimeout(() => {
+                document.getElementById('msg-1').classList.add('reveal');
+                document.getElementById('msg-2').classList.add('reveal');
+            }, 500);
+
+            // Mula janakan animasi hati terapung yang banyak dan smooth
+            startCuteHearts();
+        }
+
+        function startCuteHearts() {
+            const heartBox = document.getElementById('heart-box');
+            const heartTypes = ['❤️', '💖', '💝', '💕', '💗', '💓'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('sweet-heart');
+                
+                // Random hiasan hati & kedudukan paksi X
+                heart.innerText = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                
+                // Variasi saiz dan kelajuan float yang smooth
+                const size = (Math.random() * 1.5 + 1) + 'rem';
+                heart.style.fontSize = size;
+                
+                const duration = (Math.random() * 4 + 5) + 's'; // 5 ke 9 saat (smooth)
+                heart.style.animationDuration = duration;
+                
+                heartBox.appendChild(heart);
+                
+                // Padam unsur dari HTML selepas selesai animasi
+                setTimeout(() => { heart.remove(); }, 9000);
+            }, 400); // Kekerapan hati baru muncul
+        }
+
+        function pressKey(num) {
+            if (enteredPin.length >= 6) return;
+            enteredPin += num;
+            updateDots();
+            
+            if (enteredPin === CORRECT_PIN) {
+                setTimeout(() => {
+                    document.getElementById('lock-screen').style.transform = 'translateY(-100vh)';
+                    document.getElementById('gift-screen').style.display = 'flex';
+                }, 400);
+            }
+        }
+
+        function clearKeys() { enteredPin = ""; updateDots(); }
+        
+        function backspaceKey() {
+            if (enteredPin.length > 0) {
+                enteredPin = enteredPin.slice(0, -1);
+                updateDots();
+            }
+        }
+
+        function updateDots() {
+            dots.forEach((dot, idx) => {
+                if (idx < enteredPin.length) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+        }
+
+        // Custom Vector Gift Box Open Chain
+        function triggerGiftOpening() {
+            const wrapper = document.getElementById('interactive-gift');
+            const instructionText = document.getElementById('gift-text');
+            const mainGiftScreen = document.getElementById('gift-screen');
+            const lines = document.querySelectorAll('.burst-line');
+            
+            wrapper.classList.add('open');
+            
+            instructionText.style.transition = "opacity 0.5s ease";
+            instructionText.style.opacity = "0";
+            setTimeout(() => {
+                instructionText.innerText = "Opening your gift... ✨";
+                instructionText.style.opacity = "1";
+            }, 500);
+
+            lines.forEach(line => {
+                line.style.opacity = "0.8";
+                line.style.height = "250px";
+            });
+            
+            setTimeout(() => {
+                mainGiftScreen.style.opacity = '0';
+                
+                setTimeout(() => {
+                    mainGiftScreen.style.display = 'none';
+                    
+                    const appContent = document.getElementById('app-content');
+                    appContent.style.display = 'block';
+                    appContent.style.opacity = '0';
+                    appContent.style.transition = 'opacity 1.5s ease-in-out';
+                    
+                    setTimeout(() => { 
+                        appContent.style.opacity = '1';
+                        musicUIContainer.style.display = 'block'; 
+                        // MENGAKTIFKAN KUNCI: Sekarang barulah sistem boleh kesan scroll ke bawah!
+                        giftOpened = true; 
+                    }, 50);
+                    
+                    musicTrack.play().catch(error => {
+                        console.log("Audio autoplay context initialization cleared: ", error);
+                    });
+                    
+                    startFlowerRain(); 
+                }, 1000);
+            }, 1800);
+        }
+
+        // Background Audio Stream Audio Toggler
+        function toggleAudioSystem() {
+            if (musicTrack.paused) {
+                musicTrack.play();
+                musicButton.classList.remove('muted');
+                musicButton.style.borderColor = "rgba(229, 155, 184, 0.4)";
+                musicButton.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`;
+            } else {
+                musicTrack.pause();
+                musicButton.classList.add('muted');
+                musicButton.style.borderColor = "rgba(229, 155, 184, 0.15)";
+                musicButton.innerHTML = `<svg viewBox="0 0 24 24"><path d="M4.27 3L3 4.27l9 9v.28c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4v-1.73l5.73 5.73L21 19.73 4.27 3M14 7h4V3h-6v5.18l2 2z"/></svg>`;
+            }
+        }
+
+        // Album Booklet Page Engine
+        let currentAlbumIdx = 0;
+        function nextAlbumPage() {
+            const cards = document.querySelectorAll('.polaroid-card');
+            const totalCards = cards.length;
+            
+            cards[currentAlbumIdx].classList.remove('active');
+            currentAlbumIdx = (currentAlbumIdx + 1) % totalCards;
+            const nextIdx = (currentAlbumIdx + 1) % totalCards;
+            
+            cards.forEach((card, idx) => {
+                card.classList.remove('active', 'next-stacked');
+                if(idx === currentAlbumIdx) {
+                    card.classList.add('active');
+                } else if(idx === nextIdx) {
+                    card.classList.add('next-stacked');
+                }
+            });
+            
+            document.getElementById('album-index-view').innerText = `${currentAlbumIdx + 1} / ${totalCards}`;
+        }
+
+        // Continuous Flower Generator
+        function startFlowerRain() {
+            const flowerEmojis = ['🌸', '🌺', '🌼', '💮', '🌹', '💕', '🌻'];
+            setInterval(() => {
+                const flower = document.createElement('div');
+                flower.classList.add('falling-flower');
+                
+                flower.innerText = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+                
+                flower.style.left = Math.random() * 100 + 'vw';
+                flower.style.fontSize = (Math.random() * 1.5 + 0.8) + 'rem';
+                
+                flower.style.animationDuration = (Math.random() * 5 + 7) + 's';
+                
+                document.body.appendChild(flower);
+                
+                setTimeout(() => { flower.remove(); }, 12000);
+            }, 1200);
+        }
+    </script>
+</body>
+</html>
